@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiftOps PNCP - Monitoramento Eletrônico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-cyan-500 selection:text-slate-950">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-cyan-500/10 border border-cyan-500/30 p-2.5 rounded-xl text-cyan-400">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">SiftOps <span class="text-cyan-400">PNCP</span></h1>
+                    <p class="text-xs text-slate-400">Central de Análise e Monitoramento Eletrônico</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 border border-slate-700">
+                    <i class="fa-solid fa-circle text-emerald-400 text-[8px] mr-1"></i> Painel Ativo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar de Filtros -->
+        <aside class="lg:col-span-1 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-5">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i> Filtros do Setor
+                </h2>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Estado (UF)</label>
+                    <select id="filtroUf" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                        <option value="">Brasil Inteiro (Todos)</option>
+                        <option value="RS" selected>RS - Rio Grande do Sul</option>
+                        <option value="SC">SC - Santa Catarina</option>
+                        <option value="PR">PR - Paraná</option>
+                        <option value="SP">SP - São Paulo</option>
+                        <option value="MG">MG - Minas Gerais</option>
+                        <option value="RJ">RJ - Rio de Janeiro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Termo de Pesquisa</label>
+                    <select id="termoBusca" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500">
+                        <option value="monitoramento eletronico">Monitoramento Eletrônico</option>
+                        <option value="CFTV">CFTV</option>
+                        <option value="cameras de seguranca">Câmeras de Segurança</option>
+                        <option value="controle de acesso">Controle de Acesso</option>
+                        <option value="alarme">Sistema de Alarme</option>
+                    </select>
+                </div>
+
+                <button onclick="buscarNoPNCP()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 cursor-pointer text-sm">
+                    <i class="fa-solid fa-magnifying-glass"></i> Consultar no PNCP Oficial
+                </button>
+            </div>
+
+            <!-- Meus Favoritos / Para Participar -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+                    <i class="fa-solid fa-star"></i> Acompanhamento
+                </h3>
+                <p class="text-xs text-slate-400">Editais marcados para análise interna:</p>
+                <div id="listaFavoritos" class="text-xs text-slate-500 italic bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                    Nenhum edital marcado ainda.
+                </div>
+            </div>
+        </aside>
+
+        <!-- Área Principal -->
+        <section class="lg:col-span-3 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                <h3 class="font-semibold text-white flex items-center gap-2 border-b border-slate-800 pb-4">
+                    <i class="fa-solid fa-bolt text-cyan-400"></i> Atalhos Diretos para Editais no PNCP
+                </h3>
+                <p class="text-xs text-slate-400">Clique abaixo para consultar diretamente as oportunidades em andamento no Portal Nacional de Contratações Públicas:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="p-4 bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl transition-all flex flex-col justify-between gap-3">
+                        <div>
+                            <span class="font-semibold text-sm text-cyan-400">Monitoramento Eletrônico</span>
+                            <p class="text-xs text-slate-400 mt-1">Sistemas de segurança e centrais de monitoramento.</p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-900">
+                            <button onclick="abrirAtalho('monitoramento eletronico')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-cyan-300 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-external-link"></i> Ver no PNCP
+                            </button>
+                            <button onclick="salvarInteresse('Monitoramento Eletrônico')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs py-2 px-3 rounded-lg border border-emerald-500/30 transition-all">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl transition-all flex flex-col justify-between gap-3">
+                        <div>
+                            <span class="font-semibold text-sm text-cyan-400">Sistemas de CFTV</span>
+                            <p class="text-xs text-slate-400 mt-1">Câmeras IP, gravadores e monitoramento por imagem.</p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-900">
+                            <button onclick="abrirAtalho('cftv')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-cyan-300 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-external-link"></i> Ver no PNCP
+                            </button>
+                            <button onclick="salvarInteresse('CFTV')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs py-2 px-3 rounded-lg border border-emerald-500/30 transition-all">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl transition-all flex flex-col justify-between gap-3">
+                        <div>
+                            <span class="font-semibold text-sm text-cyan-400">Controle de Acesso</span>
+                            <p class="text-xs text-slate-400 mt-1">Catracas, biometria e reconhecimento facial.</p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-900">
+                            <button onclick="abrirAtalho('controle de acesso')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-cyan-300 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-external-link"></i> Ver no PNCP
+                            </button>
+                            <button onclick="salvarInteresse('Controle de Acesso')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs py-2 px-3 rounded-lg border border-emerald-500/30 transition-all">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl transition-all flex flex-col justify-between gap-3">
+                        <div>
+                            <span class="font-semibold text-sm text-cyan-400">Sistemas de Alarme</span>
+                            <p class="text-xs text-slate-400 mt-1">Alarmes de intrusão e sensores perimétricos.</p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2 border-t border-slate-900">
+                            <button onclick="abrirAtalho('alarme')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-cyan-300 text-xs py-2 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-external-link"></i> Ver no PNCP
+                            </button>
+                            <button onclick="salvarInteresse('Alarmes')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs py-2 px-3 rounded-lg border border-emerald-500/30 transition-all">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let favoritos = [];
+
+        function obterUrlPncp(termo) {
+            const uf = document.getElementById('filtroUf').value;
+            const q = encodeURIComponent(termo);
+            let url = `https://pncp.gov.br/app/editais?q=${q}&status=recebendo_proposta`;
+            if (uf) {
+                url += `&uf=${uf}`;
+            }
+            return url;
+        }
+
+        function buscarNoPNCP() {
+            const termo = document.getElementById('termoBusca').value;
+            window.open(obterUrlPncp(termo), '_blank');
+        }
+
+        function abrirAtalho(termo) {
+            window.open(obterUrlPncp(termo), '_blank');
+        }
+
+        function salvarInteresse(nome) {
+            const uf = document.getElementById('filtroUf').value || "BR";
+            const item = `${nome} (${uf})`;
+            if (!favoritos.includes(item)) {
+                favoritos.push(item);
+                atualizarTelaFavoritos();
+            }
+        }
+
+        function atualizarTelaFavoritos() {
+            const container = document.getElementById('listaFavoritos');
+            if (favoritos.length === 0) {
+                container.innerHTML = 'Nenhum edital marcado ainda.';
+                return;
+            }
+            let html = '<ul class="space-y-1.5">';
+            favoritos.forEach(fav => {
+                html += `<li class="flex items-center justify-between text-slate-200 bg-slate-900 px-2 py-1 rounded border border-slate-800"><span><i class="fa-solid fa-check text-emerald-400 mr-1.5"></i> ${fav}</span></li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
